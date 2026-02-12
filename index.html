@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic-8 Paul - Startup Wisdom from Paul Graham</title>
+    <link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ball-black: #0a0a0a;
+            --ball-shadow: rgba(0, 0, 0, 0.8);
+            --window-bg: #1a1a2e;
+            --triangle-bg: #0f3460;
+            --text-color: #e8e8e8;
+            --glow-color: #16213e;
+            --accent: #00d9ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Rubik', sans-serif;
+            color: var(--text-color);
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 0.8; }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            z-index: 10;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        h1 {
+            font-family: 'Paytone One', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 5.5rem);
+            font-weight: 400;
+            background: linear-gradient(135deg, #00d9ff 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(0, 217, 255, 0.3);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: #a0a0a0;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .ball-container {
+            position: relative;
+            width: min(450px, 90vw);
+            height: min(450px, 90vw);
+            margin: 40px auto;
+            perspective: 1000px;
+            z-index: 5;
+        }
+
+        .magic-ball {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 30% 30%, #2a2a2a 0%, #0a0a0a 25%, #000000 60%),
+                radial-gradient(circle at 70% 70%, #000000 0%, #0a0a0a 100%);
+            box-shadow: 
+                inset -40px -40px 100px rgba(0, 0, 0, 0.95),
+                inset 30px 30px 60px rgba(255, 255, 255, 0.03),
+                inset -10px -10px 40px rgba(0, 0, 0, 0.8),
+                0 40px 100px var(--ball-shadow),
+                0 20px 60px rgba(0, 0, 0, 0.6),
+                0 0 120px rgba(0, 217, 255, 0.15);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .magic-ball::before {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 20%;
+            width: 35%;
+            height: 35%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(20px);
+        }
+
+        .magic-ball:hover {
+            transform: scale(1.02);
+        }
+
+        .magic-ball:active {
+            transform: scale(0.98);
+        }
+
+        .magic-ball.shaking {
+            animation: tiltRock 1.2s ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes tiltRock {
+            0% { transform: rotate(0deg); }
+            5% { transform: rotate(-15deg) translateX(-10px); }
+            10% { transform: rotate(15deg) translateX(10px); }
+            15% { transform: rotate(-20deg) translateX(-12px); }
+            20% { transform: rotate(20deg) translateX(12px); }
+            25% { transform: rotate(-18deg) translateX(-10px); }
+            30% { transform: rotate(18deg) translateX(10px); }
+            35% { transform: rotate(-15deg) translateX(-8px); }
+            40% { transform: rotate(15deg) translateX(8px); }
+            45% { transform: rotate(-12deg) translateX(-6px); }
+            50% { transform: rotate(12deg) translateX(6px); }
+            55% { transform: rotate(-8deg) translateX(-4px); }
+            60% { transform: rotate(8deg) translateX(4px); }
+            65% { transform: rotate(-5deg) translateX(-2px); }
+            70% { transform: rotate(5deg) translateX(2px); }
+            75% { transform: rotate(-3deg) translateX(-1px); }
+            80% { transform: rotate(3deg) translateX(1px); }
+            85% { transform: rotate(-2deg); }
+            90% { transform: rotate(2deg); }
+            95% { transform: rotate(-1deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .window {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: 
+                radial-gradient(circle at 50% 30%, #1a1a2e 0%, #0a0a14 40%, #000000 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                inset 0 15px 35px rgba(0, 0, 0, 0.95),
+                inset 0 -8px 20px rgba(0, 0, 0, 0.8),
+                inset 0 0 60px rgba(0, 0, 0, 0.9),
+                0 0 25px rgba(0, 0, 0, 0.9);
+            overflow: hidden;
+            border: 3px solid #0a0a0a;
+        }
+        
+        .window::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 30%;
+            width: 40%;
+            height: 30%;
+            background: radial-gradient(ellipse, rgba(26, 26, 46, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(10px);
+        }
+
+        .triangle-container {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .triangle {
+            position: relative;
+            width: 140px;
+            height: 120px;
+            opacity: 0;
+            transform: translateY(100px) rotateX(-90deg);
+            transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .triangle.show {
+            opacity: 1;
+            transform: translateY(0) rotateX(0deg);
+        }
+
+        .triangle svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 20px rgba(0, 71, 255, 0.6));
+        }
+
+        .answer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            width: 100px;
+            text-align: center;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 5px;
+            font-family: 'Rubik', sans-serif;
+            text-shadow: 0 0 8px rgba(0, 71, 255, 0.8), 0 2px 4px rgba(0, 0, 0, 0.9);
+            pointer-events: none;
+        }
+
+        .instruction {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-top: -80px;
+            margin-bottom: 80px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.5s forwards, pulse 2s ease-in-out 2s infinite;
+            font-weight: 700;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 10;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .context-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: min(400px, 90vw);
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            box-shadow: -10px 0 50px rgba(0, 0, 0, 0.5);
+            padding: 40px 30px;
+            overflow-y: auto;
+            transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+        }
+
+        .context-panel.open {
+            right: 0;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .context-content h2 {
+            font-family: 'Paytone One', sans-serif;
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 217, 255, 0.3);
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .context-content p {
+            line-height: 1.7;
+            margin-bottom: 18px;
+            color: #d0d0d0;
+            font-size: 0.95rem;
+        }
+
+        .context-content a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .context-content a:hover {
+            border-bottom-color: var(--accent);
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 0.85rem;
+            color: #888;
+            z-index: 10;
+        }
+
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #fff;
+        }
+
+        .divider {
+            margin: 0 8px;
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            .ball-container {
+                margin: 20px auto;
+            }
+            
+            .instruction {
+                font-size: 1rem;
+                margin-top: -60px;
+                margin-bottom: 60px;
+            }
+
+            .context-panel {
+                padding: 30px 20px;
+            }
+
+            .window {
+                width: 160px;
+                height: 160px;
+            }
+
+            .triangle {
+                width: 110px;
+                height: 95px;
+            }
+
+            .answer-text {
+                width: 80px;
+                font-size: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <header>
+        <h1>MAGIC 8 PAUL</h1>
+        <p class="subtitle">Ask the oracle of Y Combinator, Paul Graham.</p>
+    </header>
+
+    <div class="ball-container">
+        <div class="magic-ball" id="magicBall">
+            <div class="window">
+                <div class="triangle-container">
+                    <div class="triangle" id="triangle">
+                        <svg viewBox="0 0 140 120" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="70,0 140,120 0,120" fill="#0047ff"/>
+                        </svg>
+                        <div class="answer-text" id="answerText"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="instruction">Click for Answers</p>
+
+    <div class="context-panel" id="contextPanel">
+        <button class="close-btn" id="closeBtn">&times;</button>
+        <div class="context-content" id="contextContent"></div>
+    </div>
+
+    <footer class="footer">
+        Built with Claude by Kara, your best founder friend
+        <span class="divider">|</span>
+        <a href="https://bestfounderfriend.com" target="_blank" rel="noopener">bestfounderfriend.com</a>
+    </footer>
+
+    <script>
+        const answers = [
+            {
+                text: "Make something people want",
+                context: "Y Combinator's founding principle. If you make something users want, you'll probably be fine. If you don't, you're dead.",
+                link: "http://www.paulgraham.com/good.html"
+            },
+            {
+                text: "Do things that don't scale",
+                context: "Startups take off because founders make them take off. Recruit users manually. Delight them with impossible service. The Airbnb founders photographed listings themselves.",
+                link: "http://paulgraham.com/ds.html"
+            },
+            {
+                text: "Talk to users",
+                context: "Your job isn't to be an expert on startups. It's to be an expert on your users and their problems.",
+                link: "http://paulgraham.com/startupideas.html"
+            },
+            {
+                text: "Launch now",
+                context: "You haven't really started working until you've launched. Launching teaches you what you should have been building.",
+                link: "http://paulgraham.com/13sentences.html"
+            },
+            {
+                text: "Be relentlessly resourceful",
+                context: "The quality that defines successful founders. You find a way, no matter what. No excuses.",
+                link: "http://paulgraham.com/relres.html"
+            },
+            {
+                text: "Get ramen profitable",
+                context: "Make just enough to cover living expenses. Once you're ramen profitable, everything changes. You don't need investors this month.",
+                link: "http://paulgraham.com/ramenprofitable.html"
+            },
+            {
+                text: "Live in the future, build what's missing",
+                context: "The best startup ideas come from noticing what seems obviously missing. Live where the future is happening.",
+                link: "http://paulgraham.com/startupideas.html"
+            },
+            {
+                text: "Solve your own problem",
+                context: "The best ideas are things you want, that you can build, and that few others realize are worth doing.",
+                link: "http://paulgraham.com/startupideas.html"
+            },
+            {
+                text: "Focus on growth",
+                context: "Growth defines a startup. Aim for 5-7% weekly. If you have 100 users, get 10 more next week.",
+                link: "http://paulgraham.com/growth.html"
+            },
+            {
+                text: "Delight users intensely",
+                context: "Better to make a few users love you than many feel ambivalent. Those passionate users become your foundation.",
+                link: "http://paulgraham.com/13sentences.html"
+            },
+            {
+                text: "Welcome to the trough of sorrow",
+                context: "Every startup hits it—the period after excitement fades but before traction begins. It's normal. Keep going.",
+                link: "http://paulgraham.com/aord.html"
+            },
+            {
+                text: "Don't force the vision",
+                context: "Organic ideas beat forced ones. Stop trying to think of startup ideas. Notice problems instead.",
+                link: "http://paulgraham.com/startupideas.html"
+            }
+        ];
+
+        const ball = document.getElementById('magicBall');
+        const triangle = document.getElementById('triangle');
+        const answerText = document.getElementById('answerText');
+        const contextPanel = document.getElementById('contextPanel');
+        const contextContent = document.getElementById('contextContent');
+        const closeBtn = document.getElementById('closeBtn');
+        let isShaking = false;
+
+        // Create stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        function getRandomAnswer() {
+            return answers[Math.floor(Math.random() * answers.length)];
+        }
+
+        function showAnswer() {
+            if (isShaking) return;
+            
+            isShaking = true;
+            ball.classList.add('shaking');
+            triangle.classList.remove('show');
+
+            setTimeout(() => {
+                const answer = getRandomAnswer();
+                answerText.textContent = answer.text;
+                triangle.classList.add('show');
+                
+                // Update context panel
+                contextContent.innerHTML = `
+                    <h2>${answer.text}</h2>
+                    <p>${answer.context}</p>
+                    <p><a href="${answer.link}" target="_blank" rel="noopener">Read the essay →</a></p>
+                `;
+                
+                // 3 second delay before showing the popup
+                setTimeout(() => {
+                    contextPanel.classList.add('open');
+                }, 3000);
+                
+                ball.classList.remove('shaking');
+                isShaking = false;
+            }, 1200);
+        }
+
+        ball.addEventListener('click', showAnswer);
+
+        closeBtn.addEventListener('click', () => {
+            contextPanel.classList.remove('open');
+        });
+
+        // Close panel when clicking outside
+        contextPanel.addEventListener('click', (e) => {
+            if (e.target === contextPanel) {
+                contextPanel.classList.remove('open');
+            }
+        });
+
+        // Keyboard shortcut
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                contextPanel.classList.remove('open');
+            }
+            if (e.key === ' ' && !isShaking) {
+                e.preventDefault();
+                showAnswer();
+            }
+        });
+    </script>
+</body>
+</html>
